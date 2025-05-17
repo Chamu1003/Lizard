@@ -58,7 +58,7 @@ export default function Navbar({ isLoggedIn }) {
               <Link to="/buyer/login" className="px-4 py-2 text-gray-600 font-medium hover:text-emerald-500 transition-colors duration-200">
                 Login
               </Link>
-              <Link to="/buyer/register" className="px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors duration-200">
+              <Link to="/register" className="px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors duration-200">
                 Register
               </Link>
             </>
@@ -88,7 +88,7 @@ export default function Navbar({ isLoggedIn }) {
                 <Link to="/buyer/login" className="text-gray-600 hover:text-emerald-500 px-4 py-2">
                   Login
                 </Link>
-                <Link to="/buyer/register" className="text-emerald-600 font-medium px-4 py-2">
+                <Link to="/register" className="text-emerald-600 font-medium px-4 py-2">
                   Register
                 </Link>
               </>

@@ -31,6 +31,7 @@ import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
 import SellerRequests from './pages/SellerRequest';
 import UpdateProduct from './pages/UpdateProduct';
+import AuthRegister from './pages/AuthRegister'; // <-- New import
 
 export default function App() {
   return (
@@ -68,7 +69,7 @@ function AppWithConditionalNavbar() {
   ];
   
   const hideNavbar = hideNavbarRoutes.includes(path);
-  
+
   return (
     <>
       {!hideNavbar && (showPostLoginNavbar ? <PostLoginNavbar /> : <Navbar isLoggedIn={isBuyerLoggedIn} />)}
@@ -98,6 +99,9 @@ function AppWithConditionalNavbar() {
         <Route path="/seller/add-product" element={<AddProduct />} />
         <Route path="/seller/requests" element={<SellerRequests />} />
         <Route path="/seller/update-product/:id" element={<UpdateProduct />} />
+        
+        {/* Unified Registration Page */}
+        <Route path="/register" element={<AuthRegister />} />
         
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
