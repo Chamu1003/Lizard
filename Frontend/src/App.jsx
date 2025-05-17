@@ -1,4 +1,4 @@
-// App.jsx
+// App.jsx - Updated with AuthLogin route
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -31,7 +31,8 @@ import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
 import SellerRequests from './pages/SellerRequest';
 import UpdateProduct from './pages/UpdateProduct';
-import AuthRegister from './pages/AuthRegister'; // <-- New import
+import AuthRegister from './pages/AuthRegister';
+import AuthLogin from './pages/AuthLogin'; // <-- New import
 
 export default function App() {
   return (
@@ -83,6 +84,9 @@ function AppWithConditionalNavbar() {
         
         {/* Cart - Requires Login */}
         <Route path="/cart" element={<Cart />} />
+        
+        {/* Auth Selection Route */}
+        <Route path="/auth/login" element={<AuthLogin />} />
         
         {/* Buyer Auth */}
         <Route path="/buyer/login" element={<BuyerLogin />} />

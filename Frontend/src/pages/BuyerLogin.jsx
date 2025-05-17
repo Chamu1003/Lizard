@@ -79,6 +79,16 @@ function BuyerLogin() {
           >
             Login
           </button>
+
+          <div className="text-center mt-4">
+            <button
+              type="button"
+              onClick={() => navigate('/auth/login')}
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Back to Login Selection
+            </button>
+          </div>
         </form>
       </div>
     </div>
