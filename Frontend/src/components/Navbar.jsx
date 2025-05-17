@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+// src/components/Navbar.jsx - Updated with AuthLogin link
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -55,7 +55,7 @@ export default function Navbar({ isLoggedIn }) {
           ) : (
             // Show login and register buttons if not logged in
             <>
-              <Link to="/buyer/login" className="px-4 py-2 text-gray-600 font-medium hover:text-emerald-500 transition-colors duration-200">
+              <Link to="/auth/login" className="px-4 py-2 text-gray-600 font-medium hover:text-emerald-500 transition-colors duration-200">
                 Login
               </Link>
               <Link to="/register" className="px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors duration-200">
@@ -85,7 +85,7 @@ export default function Navbar({ isLoggedIn }) {
             ) : (
               // Show login and register buttons if not logged in
               <>
-                <Link to="/buyer/login" className="text-gray-600 hover:text-emerald-500 px-4 py-2">
+                <Link to="/auth/login" className="text-gray-600 hover:text-emerald-500 px-4 py-2">
                   Login
                 </Link>
                 <Link to="/register" className="text-emerald-600 font-medium px-4 py-2">

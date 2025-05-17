@@ -1,8 +1,6 @@
-// src/pages/SellerRegister.jsx
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 
 function SellerRegister() {
   const [formData, setFormData] = useState({
@@ -27,34 +25,132 @@ function SellerRegister() {
   };
 
   return (
-    <div className="register-container">
-      <h2>Seller Registration</h2>
-      <form className="register-form" onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" required onChange={handleChange} />
-        <input name="email" type="email" placeholder="Email" required onChange={handleChange} />
-        <input name="phone" placeholder="Phone" required onChange={handleChange} />
-        <input name="whatsapp" placeholder="WhatsApp" onChange={handleChange} />
-        <input name="address" placeholder="Address" required onChange={handleChange} />
-        <input name="country" placeholder="Country" required onChange={handleChange} />
-        <input name="city" placeholder="City" required onChange={handleChange} />
-        <input name="postalCode" placeholder="Postal Code" required onChange={handleChange} />
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Seller Registration</h2>
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <input
+            name="name"
+            placeholder="Name"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            name="phone"
+            placeholder="Phone"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            name="whatsapp"
+            placeholder="WhatsApp"
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            name="address"
+            placeholder="Address"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            name="country"
+            placeholder="Country"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="city"
+            placeholder="City"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            name="postalCode"
+            placeholder="Postal Code"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-        <label>Seller Type</label>
-        <select name="sellerType" onChange={handleChange} value={formData.sellerType}>
-          <option value="solo">Solo</option>
-          <option value="company">Company</option>
-        </select>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Seller Type</label>
+          <select
+            name="sellerType"
+            onChange={handleChange}
+            value={formData.sellerType}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="solo">Solo</option>
+            <option value="company">Company</option>
+          </select>
+        </div>
 
         {formData.sellerType === "company" && (
-          <>
-            <input name="companyName" placeholder="Company Name" onChange={handleChange} />
-            <input name="companyAddress" placeholder="Company Address" onChange={handleChange} />
-            <input name="companyPhone" placeholder="Company Phone" onChange={handleChange} />
-          </>
+          <div className="space-y-4">
+            <input
+              name="companyName"
+              placeholder="Company Name"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="companyAddress"
+              placeholder="Company Address"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="companyPhone"
+              placeholder="Company Phone"
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         )}
 
-        <input name="password" type="password" placeholder="Password" required onChange={handleChange} />
-        <button type="submit" className="btn-submit">Register</button>
+        <div>
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition duration-300"
+        >
+          Register
+        </button>
       </form>
     </div>
   );
