@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ImagePlus, Package, DollarSign, FileText, Grid, Tag } from "lucide-react";
 
 function AddProduct() {
   const navigate = useNavigate();
@@ -16,11 +17,20 @@ function AddProduct() {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [previewImages, setPreviewImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "images") {
       setFormData({ ...formData, images: files });
+      
+      // Create preview URLs for the selected images
+      const previews = [];
+      for (let i = 0; i < files.length; i++) {
+        previews.push(URL.createObjectURL(files[i]));
+      }
+      setPreviewImages(previews);
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -38,7 +48,7 @@ function AddProduct() {
     if (!formData.images.length) {
       newErrors.images = "At least one image is required.";
     } else {
-      // Validate image type and size (optional)
+      // Validate image type and size
       const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
       for (let i = 0; i < formData.images.length; i++) {
         const file = formData.images[i];
@@ -67,6 +77,8 @@ function AddProduct() {
 
     if (!validate()) return;
 
+    setIsSubmitting(true);
+
     try {
       const data = new FormData();
       data.append("name", formData.name);
@@ -86,49 +98,205 @@ function AddProduct() {
         },
       });
 
-      alert("✅ Product added successfully!");
-      navigate("/seller/productlist");
+      setIsSubmitting(false);
+      // Show success message
+      const successMessage = document.getElementById("successMessage");
+      successMessage.classList.remove("hidden");
+      
+      // Hide success message after 3 seconds and navigate
+      setTimeout(() => {
+        navigate("/seller/productlist");
+      }, 2000);
     } catch (error) {
-      console.error("❌ Submission Error:", error);
-      alert("❌ Error adding product: " + (error.response?.data?.message || error.message));
+      setIsSubmitting(false);
+      console.error("Submission Error:", error);
+      alert("Error adding product: " + (error.response?.data?.message || error.message));
     }
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Add New Product</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data" noValidate>
-        <input type="text" name="name" placeholder="Product Name" onChange={handleChange} />
-        {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
-        <br /><br />
+    <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
+        <p className="mt-2 text-gray-600">Add a new product to your inventory</p>
+      </div>
 
-        <input type="number" name="price" placeholder="Price" onChange={handleChange} />
-        {errors.price && <p style={{ color: "red" }}>{errors.price}</p>}
-        <br /><br />
+      {/* Success Message */}
+      <div id="successMessage" className="hidden mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center animate-pulse">
+        <span className="mr-2">✅</span>
+        Product added successfully! Redirecting...
+      </div>
 
-        <input type="text" name="designMaterial" placeholder="Material" onChange={handleChange} />
-        {errors.designMaterial && <p style={{ color: "red" }}>{errors.designMaterial}</p>}
-        <br /><br />
+      {/* Product Form Card */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
+          <h2 className="text-lg font-medium text-white">Product Information</h2>
+        </div>
 
-        <input type="text" name="category" placeholder="Category" onChange={handleChange} />
-        {errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
-        <br /><br />
+        <form onSubmit={handleSubmit} encType="multipart/form-data" noValidate className="p-6 space-y-6">
+          {/* Product Name */}
+          <div className="space-y-2">
+            <label htmlFor="name" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Package size={18} className="text-purple-500" />
+              Product Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter product name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            />
+            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          </div>
 
-        <textarea name="description" placeholder="Description" onChange={handleChange}></textarea>
-        {errors.description && <p style={{ color: "red" }}>{errors.description}</p>}
-        <br /><br />
+          {/* Two Column Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Price */}
+            <div className="space-y-2">
+              <label htmlFor="price" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <DollarSign size={18} className="text-purple-500" />
+                Price
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-3 text-gray-500">$</span>
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  placeholder="0.00"
+                  value={formData.price}
+                  onChange={handleChange}
+                  className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                />
+              </div>
+              {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
+            </div>
 
-        <input type="file" name="images" onChange={handleChange} multiple />
-        {errors.images && <p style={{ color: "red" }}>{errors.images}</p>}
-        <br /><br />
+            {/* Material */}
+            <div className="space-y-2">
+              <label htmlFor="designMaterial" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <Grid size={18} className="text-purple-500" />
+                Material
+              </label>
+              <input
+                type="text"
+                id="designMaterial"
+                name="designMaterial"
+                placeholder="Enter material (e.g., Cotton, Leather)"
+                value={formData.designMaterial}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+              />
+              {errors.designMaterial && <p className="text-red-500 text-sm">{errors.designMaterial}</p>}
+            </div>
+          </div>
 
-        <button
-          type="submit"
-          style={{ padding: "10px 20px", backgroundColor: "blue", color: "white" }}
-        >
-          Add Product
-        </button>
-      </form>
+          {/* Category */}
+          <div className="space-y-2">
+            <label htmlFor="category" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Tag size={18} className="text-purple-500" />
+              Category
+            </label>
+            <input
+              type="text"
+              id="category"
+              name="category"
+              placeholder="Enter product category"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            />
+            {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <label htmlFor="description" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <FileText size={18} className="text-purple-500" />
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="Enter product description"
+              value={formData.description}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+            ></textarea>
+            {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
+          </div>
+
+          {/* Image Upload */}
+          <div className="space-y-2">
+            <label htmlFor="images" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <ImagePlus size={18} className="text-purple-500" />
+              Product Images
+            </label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
+              <div className="text-center">
+                <ImagePlus className="mx-auto h-12 w-12 text-gray-400" />
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600">
+                    Drag and drop your images here, or
+                  </p>
+                  <p className="mt-1">
+                    <label htmlFor="images" className="text-sm font-medium text-purple-600 hover:text-purple-500 cursor-pointer">
+                      Browse files
+                    </label>
+                  </p>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">JPG, JPEG, PNG up to 2MB</p>
+              </div>
+              <input
+                id="images"
+                name="images"
+                type="file"
+                multiple
+                onChange={handleChange}
+                className="hidden"
+              />
+            </div>
+            {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
+            
+            {/* Image Previews */}
+            {previewImages.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm font-medium text-gray-700 mb-2">Selected Images:</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {previewImages.map((src, index) => (
+                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                      <img src={src} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <div className="pt-4">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all disabled:opacity-70"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                  Processing...
+                </>
+              ) : (
+                "Add Product"
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
