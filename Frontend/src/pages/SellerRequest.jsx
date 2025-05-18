@@ -4,11 +4,21 @@ import axios from 'axios';
 export default function SellerRequests() {
   const sellerId = localStorage.getItem('sellerId');
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     axios.get(`http://localhost:4000/api/orders/seller/${sellerId}`)
-      .then(res => setOrders(res.data))
-      .catch(console.error);
+      .then(res => {
+        setOrders(res.data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setError('Failed to load order requests');
+        setIsLoading(false);
+      });
   }, [sellerId]);
 
   const confirm = (id) => {
@@ -17,8 +27,37 @@ export default function SellerRequests() {
         const updated = res.data.order;
         setOrders(o => o.map(x => x._id === id ? updated : x));
       })
-      .catch(console.error);
+      .catch(err => {
+        console.error(err);
+        alert('Failed to confirm order');
+      });
   };
+
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto p-6">
+        <div className="flex justify-center items-center py-16">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-6xl mx-auto p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <p className="text-red-600">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-3 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">

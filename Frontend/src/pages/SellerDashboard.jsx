@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import ProfileSeller from './ProfileSeller';
-import AddProduct from './AddProduct'; // Import the AddProduct component
+import AddProduct from './AddProduct';
+import ProductList from './ProductList';
+import SellerRequests from './SellerRequest'; // Import the SellerRequests component
 
 export default function SellerDashboard() {
   // State to track which component to display in the main content area
@@ -21,11 +22,9 @@ export default function SellerDashboard() {
       case 'profile':
         return <ProfileSellerWrapper />;
       case 'product-list':
-        // You would implement or import your ProductList component here
-        return <div className="p-8">Product List Component</div>;
+        return <ProductListWrapper />;
       case 'requests':
-        // You would implement or import your Requests component here
-        return <div className="p-8">Buyer Requests Component</div>;
+        return <SellerRequestsWrapper />;
       default:
         return <ProfileSellerWrapper />;
     }
@@ -171,6 +170,61 @@ function AddProductWrapper() {
       
       {/* Include the actual AddProduct component */}
       <AddProduct />
+    </div>
+  );
+}
+
+// This wrapper component handles the styling adjustments needed to embed ProductList in the dashboard
+function ProductListWrapper() {
+  return (
+    <div className="product-list-wrapper">
+      {/* Apply custom styles to adapt ProductList to dashboard layout */}
+      <style jsx>{`
+        .product-list-wrapper :global(h2) {
+          display: none; /* Hide the original heading */
+        }
+
+        .product-list-wrapper :global(.py-8) {
+          padding-top: 0;
+          padding-bottom: 0;
+        }
+        
+        .product-list-wrapper :global(.max-w-6xl) {
+          max-width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      `}</style>
+      
+      {/* Include the actual ProductList component */}
+      <ProductList />
+    </div>
+  );
+}
+
+// This wrapper component handles the styling adjustments needed to embed SellerRequests in the dashboard
+function SellerRequestsWrapper() {
+  return (
+    <div className="seller-requests-wrapper">
+      {/* Apply custom styles to adapt SellerRequests to dashboard layout */}
+      <style jsx>{`
+        .seller-requests-wrapper :global(h2) {
+          display: none; /* Hide the original heading */
+        }
+        
+        .seller-requests-wrapper :global(.max-w-6xl) {
+          max-width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .seller-requests-wrapper :global(.p-6) {
+          padding: 0;
+        }
+      `}</style>
+      
+      {/* Include the actual SellerRequests component */}
+      <SellerRequests />
     </div>
   );
 }
