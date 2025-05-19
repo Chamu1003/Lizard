@@ -1,30 +1,36 @@
 import React, { useState } from 'react';
-import { LogOut } from 'lucide-react';
+import { LogOut, MessageSquare } from 'lucide-react';
 import ProfileSeller from './ProfileSeller';
 import AddProduct from './AddProduct';
 import ProductList from './ProductList';
-import SellerRequests from './SellerRequest'; // Import the SellerRequests component
+import SellerRequests from './SellerRequest';
+import Assistant from '../components/Assistant';
 
 export default function SellerDashboard() {
-  // State to track which component to display in the main content area
-  const [activeComponent, setActiveComponent] = useState('profile'); // Default to profile
+  const [activeComponent, setActiveComponent] = useState('profile');
 
   const handleLogout = () => {
     localStorage.removeItem("sellerId");
     window.location.href = "/";
   };
 
-  // Function to render the active component
+  // Function to navigate to product list after adding a product
+  const handleProductAdded = () => {
+    setActiveComponent('product-list');
+  };
+
   const renderComponent = () => {
     switch (activeComponent) {
       case 'add-product':
-        return <AddProductWrapper />;
+        return <AddProductWrapper onProductAdded={handleProductAdded} />;
       case 'profile':
         return <ProfileSellerWrapper />;
       case 'product-list':
         return <ProductListWrapper />;
       case 'requests':
         return <SellerRequestsWrapper />;
+      case 'assistant':
+        return <AssistantWrapper />;
       default:
         return <ProfileSellerWrapper />;
     }
@@ -35,7 +41,8 @@ export default function SellerDashboard() {
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-md">
         <div className="p-5">
-          <h2 className="text-2xl font-bold text-blue-600">🛍️ Lizard</h2>
+          <h2 className="text-2xl font-bold text-blue-600">Lizard Enterprise</h2>
+          <p className="text-sm text-gray-500 mt-1">Merchant Portal</p>
         </div>
         <nav className="px-4 py-2">
           <ul className="space-y-2">
@@ -79,31 +86,36 @@ export default function SellerDashboard() {
                 Buyer Requests
               </button>
             </li>
+            <li>
+              <button
+                onClick={() => setActiveComponent('assistant')}
+                className={`w-full text-left flex items-center px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-600 rounded-md transition-colors ${
+                  activeComponent === 'assistant' ? 'bg-blue-100 text-blue-600' : ''
+                }`}
+              >
+                <MessageSquare size={16} className="mr-2" />
+                AI Assistant
+              </button>
+            </li>
           </ul>
         </nav>
+        
+        {/* Logout button moved to bottom of sidebar */}
+        <div className="absolute bottom-0 w-64 p-4 border-t border-gray-200">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 w-full bg-gray-100 text-gray-700 rounded-lg hover:bg-red-50 hover:text-red-600 transition-all"
+          >
+            <LogOut size={16} />
+            <span>Sign Out</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto">
-        {/* Dynamic Header based on active component */}
-        <div className="flex justify-between items-center p-8 bg-white shadow-sm">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            {activeComponent === 'add-product' && 'Add Product'}
-            {activeComponent === 'profile' && 'Seller Profile'}
-            {activeComponent === 'product-list' && 'Product List'}
-            {activeComponent === 'requests' && 'Buyer Requests'}
-          </h1>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-all"
-          >
-            <LogOut size={18} />
-            Logout
-          </button>
-        </div>
-
-        {/* Render the active component */}
-        <div className="p-4">
+        {/* Component content */}
+        <div className="p-6">
           {renderComponent()}
         </div>
       </main>
@@ -115,10 +127,9 @@ export default function SellerDashboard() {
 function ProfileSellerWrapper() {
   return (
     <div className="profile-seller-wrapper">
-      {/* Apply custom styles to adapt ProfileSeller to dashboard layout */}
       <style jsx>{`
         .profile-seller-wrapper :global(h1) {
-          display: none; /* Hide the original heading */
+          display: none;
         }
 
         .profile-seller-wrapper :global(.min-h-screen) {
@@ -133,24 +144,23 @@ function ProfileSellerWrapper() {
         }
         
         .profile-seller-wrapper :global(button[type="button"]:has(.lucide-log-out)) {
-          display: none; /* Hide the duplicate logout button */
+          display: none;
         }
       `}</style>
       
-      {/* Include the actual ProfileSeller component */}
       <ProfileSeller />
     </div>
   );
 }
 
 // This wrapper component handles the styling adjustments needed to embed AddProduct in the dashboard
-function AddProductWrapper() {
+// Now passes the onProductAdded callback
+function AddProductWrapper({ onProductAdded }) {
   return (
     <div className="add-product-wrapper">
-      {/* Apply custom styles to adapt AddProduct to dashboard layout */}
       <style jsx>{`
         .add-product-wrapper :global(h1) {
-          display: none; /* Hide the original heading */
+          display: none;
         }
 
         .add-product-wrapper :global(.py-8) {
@@ -168,8 +178,7 @@ function AddProductWrapper() {
         }
       `}</style>
       
-      {/* Include the actual AddProduct component */}
-      <AddProduct />
+      <AddProduct onProductAdded={onProductAdded} />
     </div>
   );
 }
@@ -178,10 +187,9 @@ function AddProductWrapper() {
 function ProductListWrapper() {
   return (
     <div className="product-list-wrapper">
-      {/* Apply custom styles to adapt ProductList to dashboard layout */}
       <style jsx>{`
         .product-list-wrapper :global(h2) {
-          display: none; /* Hide the original heading */
+          display: none;
         }
 
         .product-list-wrapper :global(.py-8) {
@@ -196,7 +204,6 @@ function ProductListWrapper() {
         }
       `}</style>
       
-      {/* Include the actual ProductList component */}
       <ProductList />
     </div>
   );
@@ -206,10 +213,9 @@ function ProductListWrapper() {
 function SellerRequestsWrapper() {
   return (
     <div className="seller-requests-wrapper">
-      {/* Apply custom styles to adapt SellerRequests to dashboard layout */}
       <style jsx>{`
         .seller-requests-wrapper :global(h2) {
-          display: none; /* Hide the original heading */
+          display: none;
         }
         
         .seller-requests-wrapper :global(.max-w-6xl) {
@@ -223,8 +229,16 @@ function SellerRequestsWrapper() {
         }
       `}</style>
       
-      {/* Include the actual SellerRequests component */}
       <SellerRequests />
+    </div>
+  );
+}
+
+// This wrapper component handles any styling adjustments needed for the Assistant component
+function AssistantWrapper() {
+  return (
+    <div className="assistant-wrapper h-full">
+      <Assistant />
     </div>
   );
 }

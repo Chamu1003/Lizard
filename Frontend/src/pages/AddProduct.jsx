@@ -1,10 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { ImagePlus, Package, DollarSign, FileText, Grid, Tag } from "lucide-react";
 
-function AddProduct() {
-  const navigate = useNavigate();
+function AddProduct({ onProductAdded }) {
+  // Remove useNavigate since we'll use the callback instead
   const sellerId = localStorage.getItem("sellerId");
 
   const [formData, setFormData] = useState({
@@ -109,13 +108,16 @@ function AddProduct() {
       });
 
       setIsSubmitting(false);
+      
       // Show success message
       const successMessage = document.getElementById("successMessage");
       successMessage.classList.remove("hidden");
       
-      // Hide success message after 3 seconds and navigate
+      // Call the callback after 2 seconds to navigate to product list in parent component
       setTimeout(() => {
-        navigate("/seller/productlist");
+        if (onProductAdded) {
+          onProductAdded();
+        }
       }, 2000);
     } catch (error) {
       setIsSubmitting(false);
@@ -135,7 +137,7 @@ function AddProduct() {
       {/* Success Message */}
       <div id="successMessage" className="hidden mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center animate-pulse">
         <span className="mr-2">✅</span>
-        Product added successfully! Redirecting...
+        Product added successfully! Redirecting to product list...
       </div>
 
       {/* Product Form Card */}
