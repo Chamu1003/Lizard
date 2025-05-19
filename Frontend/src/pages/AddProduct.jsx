@@ -16,6 +16,16 @@ function AddProduct() {
     images: []
   });
 
+  // Predefined categories
+  const categories = [
+    { value: "", label: "Select a category" },
+    { value: "Men", label: "Men's Clothing" },
+    { value: "Women", label: "Women's Clothing" },
+    { value: "Kids", label: "Kids' Clothing" },
+    { value: "Accessories", label: "Accessories" },
+    { value: "Footwear", label: "Footwear" }
+  ];
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
@@ -44,7 +54,7 @@ function AddProduct() {
       newErrors.price = "Enter a valid price.";
     if (!formData.designMaterial.trim()) newErrors.designMaterial = "Material is required.";
     if (!formData.description.trim()) newErrors.description = "Description is required.";
-    if (!formData.category.trim()) newErrors.category = "Category is required.";
+    if (!formData.category) newErrors.category = "Please select a category.";
     if (!formData.images.length) {
       newErrors.images = "At least one image is required.";
     } else {
@@ -195,21 +205,25 @@ function AddProduct() {
             </div>
           </div>
 
-          {/* Category */}
+          {/* Category Dropdown */}
           <div className="space-y-2">
             <label htmlFor="category" className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <Tag size={18} className="text-purple-500" />
               Category
             </label>
-            <input
-              type="text"
+            <select
               id="category"
               name="category"
-              placeholder="Enter product category(Men,Women,Kids)"
               value={formData.category}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-            />
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
+            >
+              {categories.map((category) => (
+                <option key={category.value} value={category.value}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
             {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
           </div>
 
