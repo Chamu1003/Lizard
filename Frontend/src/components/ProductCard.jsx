@@ -20,7 +20,7 @@ export default function ProductCard({ product, isAuthenticated, userRole }) {
 
   // Price formatting
   const price = Number(product.price);
-  const displayPrice = !isNaN(price) ? `₹${price.toFixed(2)}` : 'Price Not Available';
+  const displayPrice = !isNaN(price) ? `Rs.${price.toFixed(2)}` : 'Price Not Available';
   
   // Get product name from either dressName or name property
   const productName = product.dressName || product.name || 'Product';

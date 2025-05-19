@@ -13,7 +13,7 @@ export default function Home() {
         _id: '1',
         name: 'Summer Collection Dress',
         dressName: 'Floral Maxi Dress',
-        images: ['/api/placeholder/400/500'],
+        images: ['../images/Frock 1.jpg'],
         price: 89.99,
         category: 'Women',
         seller: { name: 'Fashion Forward' }
@@ -22,7 +22,7 @@ export default function Home() {
         _id: '2',
         name: 'Premium Fit Shirt',
         dressName: 'Casual Oxford Button-Down',
-        images: ['/api/placeholder/400/500'],
+        images: ['../images/shirt 5.jpeg'],
         price: 59.99,
         category: 'Men',
         seller: { name: 'Urban Style Co.' }
@@ -31,7 +31,7 @@ export default function Home() {
         _id: '3',
         name: 'Kids Play Set',
         dressName: 'Adventure Outdoors Set',
-        images: ['/api/placeholder/400/500'],
+        images: ['../images/Tshirt 2.jpg'],
         price: 45.99,
         category: 'Kids',
         seller: { name: 'Little Explorers' }
@@ -40,7 +40,7 @@ export default function Home() {
         _id: '4',
         name: 'Seasonal Jacket',
         dressName: 'All-Weather Light Jacket',
-        images: ['/api/placeholder/400/500'],
+        images: ['../images/shirt 2.jpg'],
         price: 120.99,
         category: 'Men',
         seller: { name: 'Outerwear Specialists' }
@@ -172,7 +172,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-bold text-gray-800">Featured Products</h2>
             <Link 
-              to="/products" 
+              to="/men" 
               className="text-emerald-600 hover:text-emerald-700 font-medium inline-flex items-center"
             >
               View All
@@ -202,7 +202,7 @@ export default function Home() {
                     <p className="text-sm text-gray-500 mb-1">{product.seller.name}</p>
                     <h3 className="font-medium text-gray-900 mb-2">{product.dressName}</h3>
                     <div className="flex justify-between items-center">
-                      <p className="font-bold text-emerald-600">${product.price}</p>
+                      <p className="font-bold text-emerald-600">RS.{product.price}</p>
                       <Link 
                         to={`/product/${product._id}`}
                         className="text-sm text-emerald-600 hover:text-emerald-700 inline-flex items-center"

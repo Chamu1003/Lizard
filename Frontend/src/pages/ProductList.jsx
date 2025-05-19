@@ -41,7 +41,8 @@ function ProductList() {
   };
 
   const handleEdit = (productId) => {
-    navigate(`/edit-product/${productId}`);
+    navigate(`/seller/update-product/${productId}`);
+
   };
 
   if (loading) return <p className="text-lg text-center py-8 text-gray-600">Loading products...</p>;

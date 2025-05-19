@@ -21,7 +21,7 @@ export default function BuyerRegister() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+//..................................................validation ............................................
   const validate = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = "Name is required.";
