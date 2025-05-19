@@ -62,7 +62,7 @@ export default function Cart() {
       setSelectedItems([]);
     }
   };
-
+//.......................................................validation........................................
   const handleQuantityChange = (itemId, newQty) => {
     const quantity = parseInt(newQty, 10);
     if (!quantity || quantity < 1) {
@@ -86,14 +86,14 @@ export default function Cart() {
       });
   };
 
-  // Calculate subtotal, taxes, and total
+  //............................................. Calculate subtotal, taxes, and total
   const selectedItemsData = items.filter(i => selectedItems.includes(i._id) && i.product);
   const subtotal = selectedItemsData
     .reduce((sum, i) => sum + (parseFloat(i.product.price) * i.quantity), 0);
   
   const tax = subtotal * 0.18; // Assuming 18% GST
   const total = subtotal + tax;
-
+// ...................validation
   const proceedToPurchase = () => {
     if (selectedItems.length === 0) {
       alert("Please select at least one item to proceed.");
@@ -216,7 +216,7 @@ export default function Cart() {
 
                           {/* Price */}
                           <div className="w-32 text-center">
-                            <p className="text-gray-700">₹{parseFloat(product.price).toFixed(2)}</p>
+                            <p className="text-gray-700">RS.{parseFloat(product.price).toFixed(2)}</p>
                           </div>
 
                           {/* Quantity */}
@@ -246,7 +246,7 @@ export default function Cart() {
 
                           {/* Total */}
                           <div className="w-32 text-center">
-                            <p className="font-medium text-blue-600">₹{itemTotal}</p>
+                            <p className="font-medium text-blue-600">Rs.{itemTotal}</p>
                           </div>
 
                           {/* Actions */}
@@ -284,18 +284,18 @@ export default function Cart() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <p className="text-gray-600">Subtotal ({selectedItemsData.length} items)</p>
-                  <p className="text-gray-800 font-medium">₹{subtotal.toFixed(2)}</p>
+                  <p className="text-gray-800 font-medium">Rs.{subtotal.toFixed(2)}</p>
                 </div>
                 
                 <div className="flex justify-between">
                   <p className="text-gray-600">Tax (18% GST)</p>
-                  <p className="text-gray-800 font-medium">₹{tax.toFixed(2)}</p>
+                  <p className="text-gray-800 font-medium">Rs.{tax.toFixed(2)}</p>
                 </div>
                 
                 <div className="border-t border-gray-200 pt-4 mt-4">
                   <div className="flex justify-between">
                     <p className="text-lg font-bold text-gray-800">Total</p>
-                    <p className="text-lg font-bold text-blue-600">₹{total.toFixed(2)}</p>
+                    <p className="text-lg font-bold text-blue-600">Rs.{total.toFixed(2)}</p>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
                     Including GST and all applicable taxes

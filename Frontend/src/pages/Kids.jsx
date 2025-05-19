@@ -81,9 +81,9 @@ export default function Kids() {
                 className="border rounded py-1 px-2 text-gray-700"
               >
                 <option value="all">All Prices</option>
-                <option value="under1000">Under ₹1000</option>
-                <option value="1000to3000">₹1000 - ₹3000</option>
-                <option value="above3000">Above ₹3000</option>
+                <option value="under1000">Under Rs.1000</option>
+                <option value="1000to3000">Rs.1000 - Rs.3000</option>
+                <option value="above3000">Above Rs.3000</option>
               </select>
             </div>
             
@@ -153,7 +153,7 @@ export default function Kids() {
         {/* Back to Categories Button */}
         <div className="mt-12 text-center">
           <Link 
-            to="/categories" 
+            to="/" 
             className="inline-block bg-gray-200 text-gray-800 py-2 px-6 rounded-full hover:bg-gray-300 transition"
           >
             ← Back to Categories

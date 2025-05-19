@@ -11,7 +11,7 @@ export default function SellerDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("sellerId");
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   // Function to render the active component

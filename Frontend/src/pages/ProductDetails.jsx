@@ -149,7 +149,7 @@ export default function ProductDetails() {
             <h1 className="text-3xl font-bold text-gray-800 mb-2">{productName}</h1>
             
             <div className="mb-4">
-              <p className="text-2xl font-semibold text-blue-600">₹{product.price}</p>
+              <p className="text-2xl font-semibold text-blue-600">Rs.{product.price}</p>
             </div>
             
             <div className="mb-6">
@@ -194,7 +194,7 @@ export default function ProductDetails() {
             </div>
             
             <div className="mt-2 mb-6">
-              <p className="text-lg font-medium">Total: <span className="text-blue-600 font-semibold">₹{totalPrice}</span></p>
+              <p className="text-lg font-medium">Total: <span className="text-blue-600 font-semibold">Rs.{totalPrice}</span></p>
             </div>
             
             <div className="flex space-x-4">

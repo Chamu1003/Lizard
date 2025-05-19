@@ -109,7 +109,7 @@ function ProfileSeller() {
 
   const handleLogout = () => {
     localStorage.removeItem("sellerId");
-    navigate("/login");
+    navigate("/");
   };
 
   const formatLabel = (key) => {
