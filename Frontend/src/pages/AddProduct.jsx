@@ -1,10 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { ImagePlus, Package, DollarSign, FileText, Grid, Tag } from "lucide-react";
 
-function AddProduct() {
-  const navigate = useNavigate();
+function AddProduct({ onProductAdded }) {
+  // Remove useNavigate since we'll use the callback instead
   const sellerId = localStorage.getItem("sellerId");
 
   const [formData, setFormData] = useState({
@@ -15,6 +14,16 @@ function AddProduct() {
     category: "",
     images: []
   });
+
+  // Predefined categories
+  const categories = [
+    { value: "", label: "Select a category" },
+    { value: "Men", label: "Men's Clothing" },
+    { value: "Women", label: "Women's Clothing" },
+    { value: "Kids", label: "Kids' Clothing" },
+    { value: "Accessories", label: "Accessories" },
+    { value: "Footwear", label: "Footwear" }
+  ];
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,7 +53,7 @@ function AddProduct() {
       newErrors.price = "Enter a valid price.";
     if (!formData.designMaterial.trim()) newErrors.designMaterial = "Material is required.";
     if (!formData.description.trim()) newErrors.description = "Description is required.";
-    if (!formData.category.trim()) newErrors.category = "Category is required.";
+    if (!formData.category) newErrors.category = "Please select a category.";
     if (!formData.images.length) {
       newErrors.images = "At least one image is required.";
     } else {
@@ -99,13 +108,16 @@ function AddProduct() {
       });
 
       setIsSubmitting(false);
+      
       // Show success message
       const successMessage = document.getElementById("successMessage");
       successMessage.classList.remove("hidden");
       
-      // Hide success message after 3 seconds and navigate
+      // Call the callback after 2 seconds to navigate to product list in parent component
       setTimeout(() => {
-        navigate("/seller/productlist");
+        if (onProductAdded) {
+          onProductAdded();
+        }
       }, 2000);
     } catch (error) {
       setIsSubmitting(false);
@@ -125,7 +137,7 @@ function AddProduct() {
       {/* Success Message */}
       <div id="successMessage" className="hidden mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center animate-pulse">
         <span className="mr-2">✅</span>
-        Product added successfully! Redirecting...
+        Product added successfully! Redirecting to product list...
       </div>
 
       {/* Product Form Card */}
@@ -195,21 +207,25 @@ function AddProduct() {
             </div>
           </div>
 
-          {/* Category */}
+          {/* Category Dropdown */}
           <div className="space-y-2">
             <label htmlFor="category" className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <Tag size={18} className="text-purple-500" />
               Category
             </label>
-            <input
-              type="text"
+            <select
               id="category"
               name="category"
-              placeholder="Enter product category(Men,Women,Kids)"
               value={formData.category}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-            />
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white"
+            >
+              {categories.map((category) => (
+                <option key={category.value} value={category.value}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
             {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
           </div>
 
