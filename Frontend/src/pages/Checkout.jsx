@@ -106,9 +106,11 @@ export default function Checkout() {
         <h3 className="text-2xl font-semibold mb-4">Order Items</h3>
         <div className="space-y-4">
           {items.map(i => (
-            <div key={i._id} className="flex justify-between items-center border-b pb-2">
-              <span className="font-medium">{i.product.name}</span>
-              <span>{i.quantity} × Rs. {i.product.price} = <strong>Rs. {(i.product.price * i.quantity).toFixed(2)}</strong></span>
+            <div key={i._id} className="border-b pb-4">
+              <p className="font-medium text-lg">{i.product.name}</p>
+              <p>Quantity: {i.quantity}</p>
+              <p>Price per unit: Rs. {i.product.price}</p>
+              <p>Total: Rs. {(i.product.price * i.quantity).toFixed(2)}</p>
             </div>
           ))}
         </div>

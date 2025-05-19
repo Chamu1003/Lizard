@@ -205,7 +205,7 @@ function AddProduct() {
               type="text"
               id="category"
               name="category"
-              placeholder="Enter product category"
+              placeholder="Enter product category(Men,Women,Kids)"
               value={formData.category}
               onChange={handleChange}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
