@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ConfirmMessage from "../components/ConfirmMessage";
 
 function BuyerLogin() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const BASE_URL = "http://localhost:4000";
@@ -22,8 +24,8 @@ function BuyerLogin() {
 
       if (res.status === 200) {
         localStorage.setItem("buyerId", res.data.buyer._id);
-        alert("Login Successful");
-        navigate("/buyer/dashboard");
+        // Show confirmation popup instead of alert
+        setShowConfirmation(true);
       }
     } catch (error) {
       if (error.response) {
@@ -34,6 +36,11 @@ function BuyerLogin() {
         setErrorMessage("An unexpected error occurred.");
       }
     }
+  };
+
+  const handleConfirmation = () => {
+    setShowConfirmation(false);
+    navigate("/buyer/dashboard");
   };
 
   return (
@@ -91,6 +98,15 @@ function BuyerLogin() {
           </div>
         </form>
       </div>
+
+      {/* Confirmation Message Popup */}
+      <ConfirmMessage
+        isOpen={showConfirmation}
+        title="Login Successful"
+        message="You have successfully logged in to your account."
+        onClose={handleConfirmation}
+        onConfirm={handleConfirmation}
+      />
     </div>
   );
 }
