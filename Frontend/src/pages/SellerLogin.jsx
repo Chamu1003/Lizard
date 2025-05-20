@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ConfirmMessage from "../components/ConfirmMessage"; // Import the ConfirmMessage component
 
 function SellerLogin() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const BASE_URL = "http://localhost:4000";
@@ -21,9 +23,9 @@ function SellerLogin() {
       const res = await axios.post(`${BASE_URL}/api/sellers/login`, formData);
 
       if (res.status === 200) {
-        alert("Login Successful");
+        // Instead of alert, show the confirmation popup
         localStorage.setItem("sellerId", res.data.seller._id);
-        navigate("/seller/dashboard");
+        setShowConfirmation(true);
       }
     } catch (error) {
       if (error.response) {
@@ -37,6 +39,17 @@ function SellerLogin() {
         setErrorMessage("An unexpected error occurred.");
       }
     }
+  };
+
+  // Handle confirmation action (redirect to dashboard)
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    navigate("/seller/dashboard");
+  };
+
+  // Handle close action (just close the popup)
+  const handleClose = () => {
+    setShowConfirmation(false);
   };
 
   return (
@@ -94,6 +107,15 @@ function SellerLogin() {
           </div>
         </form>
       </div>
+
+      {/* Confirmation Popup */}
+      <ConfirmMessage
+        isOpen={showConfirmation}
+        title="Login Successful"
+        message="You have successfully logged in to your seller account."
+        onClose={handleClose}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 }

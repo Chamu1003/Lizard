@@ -1,9 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import { ImagePlus, Package, DollarSign, FileText, Grid, Tag } from "lucide-react";
+import ConfirmMessage from "../components/ConfirmMessage";
 
 function AddProduct({ onProductAdded }) {
-  // Remove useNavigate since we'll use the callback instead
   const sellerId = localStorage.getItem("sellerId");
 
   const [formData, setFormData] = useState({
@@ -28,6 +28,13 @@ function AddProduct({ onProductAdded }) {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
+  
+  // State for confirmation popup
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState({
+    title: "",
+    message: ""
+  });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -80,7 +87,12 @@ function AddProduct({ onProductAdded }) {
     e.preventDefault();
 
     if (!sellerId) {
-      alert("Seller not logged in.");
+      // Show popup instead of alert
+      setConfirmationMessage({
+        title: "Authentication Error",
+        message: "Seller not logged in. Please log in first."
+      });
+      setShowConfirmation(true);
       return;
     }
 
@@ -109,11 +121,25 @@ function AddProduct({ onProductAdded }) {
 
       setIsSubmitting(false);
       
-      // Show success message
-      const successMessage = document.getElementById("successMessage");
-      successMessage.classList.remove("hidden");
+      // Show success popup instead of message
+      setConfirmationMessage({
+        title: "Success",
+        message: "Product added successfully! You will be redirected to product list."
+      });
+      setShowConfirmation(true);
       
-      // Call the callback after 2 seconds to navigate to product list in parent component
+      // Reset form
+      setFormData({
+        name: "",
+        price: "",
+        designMaterial: "",
+        description: "",
+        category: "",
+        images: []
+      });
+      setPreviewImages([]);
+      
+      // Call the callback after popup is closed
       setTimeout(() => {
         if (onProductAdded) {
           onProductAdded();
@@ -122,22 +148,34 @@ function AddProduct({ onProductAdded }) {
     } catch (error) {
       setIsSubmitting(false);
       console.error("Submission Error:", error);
-      alert("Error adding product: " + (error.response?.data?.message || error.message));
+      
+      // Show error popup instead of alert
+      setConfirmationMessage({
+        title: "Error",
+        message: "Error adding product: " + (error.response?.data?.message || error.message)
+      });
+      setShowConfirmation(true);
     }
+  };
+
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false);
   };
 
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      {/* Confirmation Popup */}
+      <ConfirmMessage 
+        isOpen={showConfirmation}
+        title={confirmationMessage.title}
+        message={confirmationMessage.message}
+        onClose={handleCloseConfirmation}
+      />
+
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
         <p className="mt-2 text-gray-600">Add a new product to your inventory</p>
-      </div>
-
-      {/* Success Message */}
-      <div id="successMessage" className="hidden mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded flex items-center animate-pulse">
-        <span className="mr-2">✅</span>
-        Product added successfully! Redirecting to product list...
       </div>
 
       {/* Product Form Card */}
