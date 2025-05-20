@@ -40,6 +40,7 @@ export default function Men() {
       result = result.filter(p => p.price > 3000);
     }
     
+    
     // Sorting
     if (filters.sortBy === 'priceLow') {
       result.sort((a, b) => a.price - b.price);
